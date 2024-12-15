@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Data Generator - India Style</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f3f3f3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+      background-image: linear-gradient(to bottom, #f4f4f9, #ffa726);
+    }
+    h1 {
+      color: #ff5722;
+      font-size: 28px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    button:hover {
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      transform: scale(1.05);
+    }
+    button:nth-child(1) {
+      background-color: #ff5722;
+    }
+    button:nth-child(1):hover {
+      background-color: #e64a19;
+    }
+    button:nth-child(2) {
+      background-color: #4caf50;
+    }
+    button:nth-child(2):hover {
+      background-color: #388e3c;
+    }
+    button:nth-child(3) {
+      background-color: #2196f3;
+    }
+    button:nth-child(3):hover {
+      background-color: #1976d2;
+    }
+    button:nth-child(4) {
+      background-color: #d32f2f;
+    }
+    button:nth-child(4):hover {
+      background-color: #c62828;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="greeting">नमस्ते! रैंडम डेटा जेनरेट करें</h1>
+  <button onclick="redirectTo('phone.html')">Generate Random Phone Number</button>
+  <button onclick="redirectTo('name.html')">Generate Random Name</button>
+  <button onclick="redirectTo('email.html')">Generate Random Email</button>
+  <button onclick="redirectTo('number.html')">Generate Random Number</button>
+  <script>
+    function updateGreeting() {
+      const hour = new Date().getHours();
+      const greetingElement = document.getElementById("greeting");
+      if (hour < 12) {
+        greetingElement.innerText = "Good Morning! रैंडम डेटा जेनरेट करें";
+      } else if (hour < 18) {
+        greetingElement.innerText = "Good Afternoon! रैंडम डेटा जेनरेट करें";
+      } else {
+        greetingElement.innerText = "Good Evening! रैंडम डेटा जेनरेट करें";
+      }
+    }
+
+    function redirectTo(page) {
+      window.location.href = page;
+    }
+
+    // Call the function to update greeting on page load
+    updateGreeting();
+  </script>
+</body>
+</html>

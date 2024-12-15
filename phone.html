@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>generateRandomPhoneNumbers</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-color: #f5f5dc; /* Light beige */
+      color: #800080; /* Purple */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+    }
+
+    .container {
+      background-color: #ffefd5; /* Papaya Whip */
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(128, 0, 128, 0.5);
+      text-align: center;
+      width: 450px;
+      border: 2px dashed #ff69b4; /* Hot Pink */
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #ff4500; /* Orange Red */
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    label, p {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    select, input, button {
+      background-color: #fff5ee; /* Seashell */
+      color: #800080;
+      border: 2px solid #ff69b4; /* Hot Pink */
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      border-radius: 10px;
+    }
+
+    button:hover {
+      background-color: #ff69b4;
+      color: white;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 20px;
+      background-color: #ffe4e1; /* Misty Rose */
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 18px;
+      color: #800080;
+      border: 2px dashed #ff69b4;
+      white-space: pre-wrap; /* To maintain formatting of the phone numbers */
+    }
+
+    .copy-btn {
+      margin-top: 20px;
+    }
+
+    #copyBtn {
+      background-color: #ff4500;
+      color: white;
+    }
+
+    #copyBtn:hover {
+      background-color: #d8370c;
+    }
+
+    .input-field {
+      margin-top: 15px;
+    }
+
+    select, input {
+      padding: 8px;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .options {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>generate Random PhoneNumbers</h1>
+
+    <!-- Country selection -->
+    <div class="input-field">
+      <label for="countrySelect">Select Country</label>
+      <select id="countrySelect">
+        <option value="India">India (+91)</option>
+        <option value="USA">USA (+1)</option>
+        <option value="UK">UK (+44)</option>
+        <option value="Canada">Canada (+1)</option>
+        <option value="Australia">Australia (+61)</option>
+        <option value="Germany">Germany (+49)</option>
+      </select>
+    </div>
+
+    <!-- Space option -->
+    <div class="input-field">
+      <label for="spaceOption">Include space after country code?</label>
+      <input type="checkbox" id="spaceOption">
+    </div>
+
+    <div class="input-field">
+      <label for="numPhones">How many numbers to generate?</label>
+      <input type="number" id="numPhones" min="1" max="10" value="1">
+    </div>
+
+    <div class="options">
+      <button id="generatePhone" onclick="generatePhone()">Generate Numbers</button>
+    </div>
+
+    <div class="result">
+      <p id="output">Your numbers will appear here!</p>
+    </div>
+
+    <div class="copy-btn">
+      <button id="copyBtn" onclick="copyToClipboard()">Copy</button>
+    </div>
+
+    <!-- Download Button -->
+    <div class="download-btn">
+      <button id="downloadBtn" onclick="downloadFile()">Download .txt</button>
+    </div>
+  </div>
+
+  <script>
+    const countryCodes = {
+      "India": "+91",
+      "USA": "+1",
+      "UK": "+44",
+      "Canada": "+1",
+      "Australia": "+61",
+      "Germany": "+49"
+    };
+
+    let generatedNumbers = ''; // Variable to store generated numbers
+
+    function generatePhone() {
+      const selectedCountry = document.getElementById("countrySelect").value;
+      const countryCode = countryCodes[selectedCountry];
+      const includeSpace = document.getElementById("spaceOption").checked;
+      const numPhones = parseInt(document.getElementById("numPhones").value);
+      let outputText = "";
+
+      // Determine the format based on the space option
+      const formattedCode = includeSpace ? countryCode + " " : countryCode;
+
+      // Generate the phone numbers
+      for (let i = 0; i < numPhones; i++) {
+        const phoneNumber = formattedCode + generateRandomPhoneNumber();
+        outputText += `${phoneNumber}\n`;  // Use \n for new lines
+      }
+
+      generatedNumbers = outputText.trim();  // Store the generated numbers
+      document.getElementById("output").innerText = generatedNumbers;  // Update output without <br> tags
+    }
+
+    function generateRandomPhoneNumber() {
+      // Generate a random phone number for each country (e.g., 10 digits for India)
+      const digits = 10;
+      let phoneNumber = "";
+      for (let i = 0; i < digits; i++) {
+        phoneNumber += Math.floor(Math.random() * 10);
+      }
+      return phoneNumber;
+    }
+
+    function copyToClipboard() {
+      const text = document.getElementById("output").innerText;  // Use innerText to avoid HTML formatting
+      if (text !== "Your numbers will appear here!") {
+        navigator.clipboard.writeText(text)
+          .then(() => {
+            alert("Copied to clipboard: " + text);
+          })
+          .catch(err => {
+            console.error("Error copying text: ", err);
+          });
+      } else {
+        alert("No text to copy!");
+      }
+    }
+
+    function downloadFile() {
+      if (generatedNumbers === '') {
+        alert("No numbers to download!");
+        return;
+      }
+
+      // Create a blob with the generated numbers
+      const blob = new Blob([generatedNumbers], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+
+      // Create a link element to trigger the download
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'generated_numbers.txt';
+
+      // Trigger the download by clicking the link
+      link.click();
+
+      // Clean up
+      URL.revokeObjectURL(url);
+    }
+  </script>
+
+</body>
+</html>

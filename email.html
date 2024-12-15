@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Email Generator</title>
+  <style>
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #ffdf00; /* Indian Yellow */
+      color: #ff6f00; /* Indian Orange */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+    }
+
+    .container {
+      background-color: #d32f2f; /* Rich Red */
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(255, 105, 0, 0.5); /* Orange Shadow */
+      text-align: center;
+      width: 400px;
+      border: 1px solid #ff6f00;
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #ffffff;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    label, p {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+
+    select, input, button {
+      background-color: #ff6f00; /* Orange */
+      color: #ffffff;
+      border: 1px solid #ff6f00;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #ff5722; /* Darker Orange */
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 20px;
+      background-color: #d32f2f; /* Red */
+      padding: 15px;
+      border-radius: 5px;
+      font-size: 18px;
+      color: #ffffff;
+      border: 1px solid #ff6f00;
+      white-space: pre-wrap;
+    }
+
+    .copy-btn, .download-btn {
+      margin-top: 20px;
+    }
+
+    #copyBtn, #downloadBtn {
+      background-color: #008CBA;
+    }
+
+    #copyBtn:hover, #downloadBtn:hover {
+      background-color: #007bb5;
+    }
+
+    .input-field {
+      margin-top: 15px;
+    }
+
+    select, input {
+      padding: 8px;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Random Email Generator</h1>
+
+    <!-- Email Generation Settings -->
+    <div class="input-field">
+      <label for="numEmails">How many emails to generate?</label>
+      <input type="number" id="numEmails" min="1" max="10" value="1">
+    </div>
+
+    <!-- Options to include domain name -->
+    <div class="input-field">
+      <label for="includeDomain">Include Domain?</label>
+      <select id="includeDomain">
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+    </div>
+
+    <!-- Options to choose domain list or custom domain -->
+    <div class="input-field">
+      <label for="domainList">Choose Domain or Enter Custom Domain:</label>
+      <select id="domainList">
+        <option value="random">Random Domain</option>
+        <option value="gmail.com">gmail.com</option>
+        <option value="yahoo.com">yahoo.com</option>
+        <option value="hotmail.com">hotmail.com</option>
+        <option value="outlook.com">outlook.com</option>
+        <option value="random.com">random.com</option>
+      </select>
+      <input type="text" id="customDomain" placeholder="Enter custom domain" style="display: none;">
+    </div>
+
+    <!-- Button to generate emails -->
+    <div class="input-field">
+      <button id="generateEmail" onclick="generateEmail()">Generate Emails</button>
+    </div>
+
+    <!-- Display Result -->
+    <div class="result">
+      <p id="output">Select an option to generate emails.</p>
+    </div>
+
+    <!-- Copy Button -->
+    <div class="copy-btn">
+      <button id="copyBtn" onclick="copyToClipboard()">Copy</button>
+    </div>
+
+    <!-- Download Button -->
+    <div class="download-btn">
+      <button id="downloadBtn" onclick="downloadEmails()">Download as .txt</button>
+    </div>
+  </div>
+
+  <script>
+    // Helper function to generate a random string of letters and numbers
+    function generateRandomString(length) {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        result += characters.charAt(randomIndex);
+      }
+      return result;
+    }
+
+    // Function to toggle visibility of the custom domain input field
+    document.getElementById("domainList").addEventListener("change", function () {
+      const customDomainField = document.getElementById("customDomain");
+      if (this.value === "random") {
+        customDomainField.style.display = "none";
+      } else {
+        customDomainField.style.display = "none";
+      }
+    });
+
+    // Function to generate random emails
+    function generateEmail() {
+      const numEmails = parseInt(document.getElementById("numEmails").value);
+      const includeDomain = document.getElementById("includeDomain").value;
+      const domainList = document.getElementById("domainList").value;
+      const customDomain = document.getElementById("customDomain").value.trim();
+
+      let outputText = "";
+
+      for (let i = 0; i < numEmails; i++) {
+        let generatedEmail = generateRandomString(Math.floor(Math.random() * 6) + 6); // Random username length between 6 and 12 characters
+
+        // Add domain if selected
+        if (includeDomain === "yes") {
+          if (domainList === "random") {
+            const randomDomains = ["gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "example.com"];
+            const randomDomain = randomDomains[Math.floor(Math.random() * randomDomains.length)];
+            generatedEmail += "@" + randomDomain;
+          } else if (domainList !== "random" && domainList !== "") {
+            generatedEmail += "@" + domainList;
+          } else if (customDomain) {
+            generatedEmail += "@" + customDomain;
+          }
+        }
+
+        outputText += generatedEmail + "\n";
+      }
+
+      // Display generated emails
+      document.getElementById("output").innerText = outputText.trim();
+    }
+
+    // Function to copy generated emails to clipboard
+    function copyToClipboard() {
+      const outputText = document.getElementById("output").innerText;
+      navigator.clipboard.writeText(outputText)
+        .then(() => alert("Emails copied to clipboard"))
+        .catch((error) => alert("Failed to copy emails: " + error));
+    }
+
+    // Function to download the generated emails as a .txt file
+    function downloadEmails() {
+      const outputText = document.getElementById("output").innerText;
+      const blob = new Blob([outputText], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'generated_emails.txt';
+      link.click();
+    }
+  </script>
+
+</body>
+</html>

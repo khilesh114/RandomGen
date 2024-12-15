@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Name Generator with Country Selection</title>
+  <style>
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #ffcc00;
+      color: #008000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(255, 165, 0, 0.5);
+      text-align: center;
+      width: 400px;
+      border: 2px solid #008000;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #ff9900;
+      margin-bottom: 20px;
+      font-weight: bold;
+      font-family: 'Garamond', serif;
+    }
+
+    label, p {
+      font-size: 18px;
+      margin-bottom: 10px;
+      font-family: 'Georgia', serif;
+    }
+
+    select, input, button {
+      background-color: #ffebcd;
+      color: #008000;
+      border: 1px solid #008000;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      font-family: 'Arial', sans-serif;
+    }
+
+    button:hover {
+      background-color: #ff6600;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 20px;
+      background-color: #f1f1f1;
+      padding: 15px;
+      border-radius: 5px;
+      font-size: 18px;
+      color: #008000;
+      border: 1px solid #008000;
+      white-space: pre-wrap;
+    }
+
+    .copy-btn, .download-btn {
+      margin-top: 20px;
+    }
+
+    #copyBtn {
+      background-color: #008CBA;
+    }
+
+    #copyBtn:hover {
+      background-color: #007bb5;
+    }
+
+    .input-field {
+      margin-top: 15px;
+    }
+
+    select, input {
+      padding: 8px;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .options {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Random Name Generator</h1>
+
+    <!-- Country Selection -->
+    <div class="input-field">
+      <label for="country">Select Country:</label>
+      <select id="country">
+        <option value="India">India</option>
+        <option value="USA">USA</option>
+        <option value="UK">UK</option>
+        <option value="Germany">Germany</option>
+        <option value="France">France</option>
+        <option value="Australia">Australia</option>
+      </select>
+    </div>
+
+    <!-- Number of Names -->
+    <div class="input-field">
+      <label for="numNames">How many names to generate?</label>
+      <input type="number" id="numNames" min="1" max="10" value="1">
+    </div>
+
+    <!-- Options to include each name part -->
+    <div class="input-field">
+      <label for="includeFirstName">Include First Name?</label>
+      <select id="includeFirstName">
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+    </div>
+
+    <div class="input-field">
+      <label for="includeMiddleName">Include Middle Name?</label>
+      <select id="includeMiddleName">
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+    </div>
+
+    <div class="input-field">
+      <label for="includeLastName">Include Last Name?</label>
+      <select id="includeLastName">
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+    </div>
+
+    <div class="options">
+      <button id="generateName" onclick="generateName()">Generate Names</button>
+    </div>
+
+    <div class="result">
+      <p id="output">Select an option to generate.</p>
+    </div>
+
+    <div class="copy-btn">
+      <button id="copyBtn" onclick="copyToClipboard()">Copy</button>
+    </div>
+
+    <div class="download-btn">
+      <button id="downloadBtn" onclick="downloadNames()">Download as .txt</button>
+    </div>
+  </div>
+
+  <script>
+    // Helper function to generate a random string of letters (A-Z)
+    function generateRandomString(length) {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        result += characters.charAt(randomIndex);
+      }
+      return result;
+    }
+
+    // Function to generate random names based on country selection
+    function generateName() {
+      const numNames = parseInt(document.getElementById("numNames").value);
+      const includeFirstName = document.getElementById("includeFirstName").value;
+      const includeMiddleName = document.getElementById("includeMiddleName").value;
+      const includeLastName = document.getElementById("includeLastName").value;
+      const country = document.getElementById("country").value;
+
+      let outputText = "";
+
+      // Generate names based on selected options
+      for (let i = 0; i < numNames; i++) {
+        let generatedName = "";
+
+        // First name generation
+        if (includeFirstName === "yes") {
+          generatedName += generateRandomString(Math.floor(Math.random() * 5) + 3) + " ";
+        }
+
+        // Middle name generation
+        if (includeMiddleName === "yes") {
+          generatedName += generateRandomString(Math.floor(Math.random() * 5) + 3) + " ";
+        }
+
+        // Last name generation
+        if (includeLastName === "yes") {
+          generatedName += generateRandomString(Math.floor(Math.random() * 5) + 3);
+        }
+
+        outputText += generatedName.trim() + "\n";
+      }
+
+      // Display generated name
+      document.getElementById("output").innerText = outputText.trim();
+    }
+
+    // Function to copy generated name to clipboard
+    function copyToClipboard() {
+      const outputText = document.getElementById("output").innerText;
+      navigator.clipboard.writeText(outputText)
+        .then(() => alert("Name copied to clipboard"))
+        .catch((error) => alert("Failed to copy name: " + error));
+    }
+
+    // Function to download generated names as a .txt file
+    function downloadNames() {
+      const outputText = document.getElementById("output").innerText;
+
+      if (outputText.trim() === "Select an option to generate.") {
+        alert("Please generate names first.");
+        return;
+      }
+
+      // Create a Blob object with the output text
+      const blob = new Blob([outputText], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'generated_names.txt';
+      link.click();
+    }
+  </script>
+
+</body>
+</html>

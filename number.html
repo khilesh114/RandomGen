@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Number Generator</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #ffe6f0;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #fff0f5;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid #ff99c8;
+        }
+        h1 {
+            font-size: 26px;
+            color: #d147a3;
+            text-shadow: 1px 1px 2px #ff99c8;
+        }
+        .input-container {
+            margin: 20px 0;
+        }
+        input {
+            font-size: 16px;
+            padding: 8px;
+            width: 100px;
+            text-align: center;
+            border: 2px solid #ff99c8;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            color: #ffffff;
+            background-color: #d94f99;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            background-color: #b93b85;
+            transform: scale(1.1);
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+        .output {
+            font-size: 16px;
+            color: #333;
+            margin: 20px 0;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ffb6c1;
+            border-radius: 5px;
+            padding: 10px;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌸 Random Number Generator 🌸</h1>
+        <div class="input-container">
+            <input type="number" id="quantity" placeholder="How many?" min="1">
+            <button onclick="generateNumbers()">💖 Generate 💖</button>
+        </div>
+        <div class="output" id="output"></div>
+        <button onclick="downloadNumbers()">📥 Download Numbers 📥</button>
+    </div>
+    <script>
+        let numbers = []; // Array to store generated numbers
+
+        function generateNumbers() {
+            const quantity = document.getElementById("quantity").value;
+            const outputDiv = document.getElementById("output");
+            numbers = []; // Clear previous numbers
+
+            if (quantity < 1) {
+                outputDiv.innerHTML = "Please enter a valid number!";
+                return;
+            }
+
+            for (let i = 0; i < quantity; i++) {
+                const randomNumber = Math.floor(1000000000 + Math.random() * 9000000000); // Generate 10-digit number
+                numbers.push(randomNumber);
+            }
+
+            // Display numbers in the output div
+            outputDiv.innerHTML = numbers.join("<br>");
+        }
+
+        function downloadNumbers() {
+            if (numbers.length === 0) {
+                alert("No numbers to download. Please generate some first!");
+                return;
+            }
+
+            const blob = new Blob([numbers.join("\n")], { type: "text/plain" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "random-numbers.txt";
+            link.click();
+        }
+    </script>
+</body>
+</html>
